@@ -23,6 +23,9 @@ Public Class FrmKlassen
         '2 nieuwe klasnamen, nieuwe leerling en afgestudeerd.. bij beide anders handelen
         'afgestudeerd = gn nieuwe record + status leerling aanpassen
         'nieuwe leerling = gn record update enkel nieuwe record
+        '2 nieuwe klasnamen, nieuwe leerling en afgestudeerd.. bij beide anders handelen
+        'afgestudeerd = gn nieuwe record + status leerling aanpassen
+        'nieuwe leerling = gn record update enkel nieuwe record
 
         cboVan.SelectedIndex = 1
         cboNaar.SelectedIndex = 1
