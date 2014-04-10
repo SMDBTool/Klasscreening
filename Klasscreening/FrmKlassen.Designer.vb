@@ -33,6 +33,8 @@ Partial Class FrmKlassen
         Me.btnBewaar = New System.Windows.Forms.Button()
         Me.btnVerwerp = New System.Windows.Forms.Button()
         Me.lstGewijzigde = New System.Windows.Forms.ListBox()
+        Me.dtpUitvoerdatum = New System.Windows.Forms.DateTimePicker()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'lstVan
@@ -132,11 +134,30 @@ Partial Class FrmKlassen
         Me.lstGewijzigde.Size = New System.Drawing.Size(285, 563)
         Me.lstGewijzigde.TabIndex = 10
         '
+        'dtpUitvoerdatum
+        '
+        Me.dtpUitvoerdatum.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpUitvoerdatum.Location = New System.Drawing.Point(543, 695)
+        Me.dtpUitvoerdatum.Name = "dtpUitvoerdatum"
+        Me.dtpUitvoerdatum.Size = New System.Drawing.Size(200, 20)
+        Me.dtpUitvoerdatum.TabIndex = 12
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(407, 701)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(73, 13)
+        Me.Label5.TabIndex = 11
+        Me.Label5.Text = "Uitvoerdatum:"
+        '
         'FrmKlassen
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1292, 735)
+        Me.Controls.Add(Me.dtpUitvoerdatum)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.lstGewijzigde)
         Me.Controls.Add(Me.btnVerwerp)
         Me.Controls.Add(Me.btnBewaar)
@@ -151,6 +172,7 @@ Partial Class FrmKlassen
         Me.Name = "FrmKlassen"
         Me.Text = "Klassen"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents lstVan As System.Windows.Forms.ListBox
@@ -164,4 +186,6 @@ Partial Class FrmKlassen
     Friend WithEvents btnBewaar As System.Windows.Forms.Button
     Friend WithEvents btnVerwerp As System.Windows.Forms.Button
     Friend WithEvents lstGewijzigde As System.Windows.Forms.ListBox
+    Friend WithEvents dtpUitvoerdatum As System.Windows.Forms.DateTimePicker
+    Friend WithEvents Label5 As System.Windows.Forms.Label
 End Class

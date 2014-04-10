@@ -14,13 +14,13 @@
     Public Property Pestslachtoffer As Boolean
     Public Property Anderstalig As Boolean
     Public Property Bisser As Boolean
-    Public Property Actief As Integer
+    Public Property Actief As String
 
     Public Sub New(ByVal id As Integer, ByVal voornaam As String, ByVal familienaam As String, ByVal geboortedatum As Date, ByVal inschrijvingsdatum As Date, _
         ByVal os_ass As Boolean, ByVal os_adhd As Boolean, ByVal os_gts As Boolean, ByVal ls_dyslexie As Boolean, ByVal ls_dysorthografie As Boolean, _
         ByVal ls_dyscalculie As Boolean, ByVal ls_andere As String, _
         ByVal leervoorsprong As Boolean, ByVal pestdader As Boolean, ByVal pestslachtoffer As Boolean, _
-        ByVal anderstalig As Boolean, ByVal bisser As Boolean, ByVal actief As Integer)
+        ByVal anderstalig As Boolean, ByVal bisser As Boolean, ByVal actief As String)
         Me.ID = id
         Me.VoorNaam = voornaam
         Me.FamilieNaam = familienaam

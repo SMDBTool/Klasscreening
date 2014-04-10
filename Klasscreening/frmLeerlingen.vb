@@ -52,9 +52,29 @@ Public Class frmLeerlingen
         leerlingLijst.Add(leerling)
         UpdateLeerlingenTabel()
     End Sub
+    Public Function ActiefFilter(leerling As Leerling) As Boolean
 
+        If ComboBox1.SelectedItem = "*" Then Return True
+
+        If ComboBox1.SelectedItem = leerling.Actief Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+    Public Function VoornaamFilter(leerling As Leerling) As Boolean
+        Return False
+    End Function
+    Public Function FamilienaamFilter(leerling As Leerling) As Boolean
+        Return False
+    End Function
     Public Sub UpdateLeerlingenTabel() Handles MyBase.Load, frmleerlingenwijzigen.leerlingGewijzigd, ComboBox1.SelectedIndexChanged
         dgvLeerlingen.DataSource = leerlingLijst
+
+        Dim lijst = leerlingLijst.Where(Function(x) (ActiefFilter(x) AndAlso _
+                                                     FamilienaamFilter(x) AndAlso _
+                                                     VoornaamFilter(x)))
+
         With dgvLeerlingen
             .Columns("ID").DisplayIndex = 0
             .Columns("VoorNaam").DisplayIndex = 1

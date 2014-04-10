@@ -82,7 +82,7 @@ Public Class DBRoutines
                 Convert.ToBoolean(reader(14)), _
                 Convert.ToBoolean(reader(15)), _
                 Convert.ToBoolean(reader(16)),
-                Convert.ToInt32(reader(17))))
+                actiefLijst.Where(Function(x) x.ID = Convert.ToInt32(reader(17))).First.Omschrijving))
             End While
             'Convert.ToString(reader(11)), _
             reader.Close()
@@ -118,7 +118,7 @@ Public Class DBRoutines
             Convert.ToBoolean(reader(14)), _
             Convert.ToBoolean(reader(15)), _
             Convert.ToBoolean(reader(16)),
-            Convert.ToInt32(reader(17)))
+            actiefLijst.Where(Function(x) x.ID = Convert.ToInt32(reader(17))).First.Omschrijving)
             'Convert.ToString(reader(11)), _
             reader.Close()
         Catch ex As Exception
@@ -143,7 +143,7 @@ Public Class DBRoutines
                     Convert.ToString(reader(2)), _
                     Convert.ToDateTime(reader(3)), _
                     Convert.ToDateTime(reader(4)), _
-                    Convert.ToInt32(reader(5)))
+                    Convert.ToString(reader(5)))
                 )
 
             End While
@@ -174,7 +174,9 @@ Public Class DBRoutines
                         Convert.ToInt32(reader(1)), _
                         Convert.ToInt32(reader(2)), _
                         Convert.ToDateTime(reader(3)), _
-                        Nothing))
+                        Nothing, _
+                        Convert.ToInt32(reader(5))
+                        ))
 
                 Else
 
@@ -183,7 +185,8 @@ Public Class DBRoutines
                         Convert.ToInt32(reader(1)), _
                         Convert.ToInt32(reader(2)), _
                         Convert.ToDateTime(reader(3)), _
-                        Convert.ToDateTime(reader(4)))
+                        Convert.ToDateTime(reader(4)), _
+                        Convert.ToInt32(reader(5)))
                     )
                 End If
             End While
