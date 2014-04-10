@@ -1,8 +1,8 @@
 ﻿Public Class Leerkracht
     Inherits Persoon
     Public Property InDienstTreding As Date
-    Public Property Actief As Integer
-    Public Sub New(id As Integer, voornaam As String, familienaam As String, geboortedatum As Date, indiensttreding As Date, actief As Integer)
+
+    Public Sub New(ByVal id As Integer, ByVal voornaam As String, ByVal familienaam As String, ByVal geboortedatum As Date, ByVal indiensttreding As Date, ByVal actief As String)
         Me.ID = id
         Me.VoorNaam = voornaam
         Me.FamilieNaam = familienaam
@@ -33,10 +33,10 @@
 
     End Function
 
-    Public Shared Function insertOLEDB(ByRef leerkracht As Leerkracht) As OleDb.OleDbCommand
+    Public Shared Function insertOLEDB(ByRef leerkracht As Leerkracht, ByVal actiefLijst As List(Of Actief)) As OleDb.OleDbCommand
         Dim commandText As String
 
-        commandText = "INSERT INTO TBL_Leerling " & _
+        commandText = "INSERT INTO TBL_Leerkracht " & _
         "(Voornaam,Familienaam,Geboortedatum,InDienstTreding, " & vbCrLf & _
         "Actief)" & vbCrLf & _
         " values " & vbCrLf & _

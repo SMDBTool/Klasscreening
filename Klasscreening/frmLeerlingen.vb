@@ -1,61 +1,81 @@
-﻿Imports System.Data.OleDb
-Imports Klasscreeningsklassen
+﻿Imports Klasscreeningsklassen
+Imports System.Data.OleDb
 
-Public Class frmLeerlingen
+Public Class FrmLeerlingen
+
+    Inherits FrmLeerkrachtenLeerlingen
 
     Private leerlingLijst As List(Of Leerling)
     Private actiefLijst As List(Of Actief)
     Private WithEvents frmleerlingtoevoegen As frmLeerlingToevoegen
     Private WithEvents frmleerlingenwijzigen As frmLeerlingWijzigen
 
-    Public Sub New(leerlingLijst As List(Of Leerling), actieflijst As List(Of Actief))
+    Public Sub New(ByVal leerlingenlijst As List(Of Leerling), ByVal actieflijst As List(Of Actief))
 
         InitializeComponent()
-        Me.leerlingLijst = leerlingLijst
+
+        Me.Text = "Klasscreening: Leerlingen"
+        lblFilter1.Text = "Voornaam:"
+        lblFilter2.Text = "Naam:"
+        lblFilter3.Text = "Status:"
+
+        Me.leerlingLijst = leerlingenlijst
         Me.actiefLijst = actieflijst
 
-        ComboBox1.Items.AddRange(actieflijst.ToArray)
-        ComboBox1.Items.Add("*")
-        ComboBox1.SelectedIndex = 0
-
-
+        cmbStatus.Items.AddRange(actieflijst.ToArray)
+        cmbStatus.Items.Add("*")
+        cmbStatus.SelectedIndex = 0
 
     End Sub
-    Private Sub btnLeerlingToevoegen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeerlingToevoegen.Click
+
+    Protected Overrides Sub btnToevoegen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnToevoegen.Click
 
         frmleerlingtoevoegen = New frmLeerlingToevoegen(actiefLijst)
         frmleerlingtoevoegen.ShowDialog()
 
     End Sub
 
-    Private Sub btnAfsluiten_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAfsluiten.Click
+    Protected Overrides Sub btnWijzigen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnWijzigen.Click, dgvLeerkrachtenLeerlingen.CellDoubleClick
 
-        Me.Close()
+        If dgvLeerkrachtenLeerlingen.SelectedRows IsNot Nothing Then
 
-    End Sub
-
-    Private Sub btnLeerlingWijzigen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeerlingWijzigen.Click, dgvLeerlingen.CellDoubleClick
-
-        If dgvLeerlingen.SelectedRows IsNot Nothing Then
-
-            Dim lln As Leerling = dgvLeerlingen.SelectedRows(0).DataBoundItem()
+            Dim lln As Leerling = dgvLeerkrachtenLeerlingen.SelectedRows(0).DataBoundItem()
 
             frmleerlingenwijzigen = New frmLeerlingWijzigen(lln, actiefLijst)
             frmleerlingenwijzigen.ShowDialog()
         End If
 
-
     End Sub
 
-
-    Public Sub ToevoegenLeerling(leerling As Leerling) Handles frmleerlingtoevoegen.leerlingToegevoegd
+    Public Sub ToevoegenLeerling(ByVal leerling As Leerling) Handles frmleerlingtoevoegen.leerlingToegevoegd
         leerlingLijst.Add(leerling)
         UpdateLeerlingenTabel()
     End Sub
 
-    Public Sub UpdateLeerlingenTabel() Handles MyBase.Load, frmleerlingenwijzigen.leerlingGewijzigd, ComboBox1.SelectedIndexChanged
-        dgvLeerlingen.DataSource = leerlingLijst
-        With dgvLeerlingen
+   Protected Overrides Function VoorNaamFilter(ByVal persoon As Persoon) As Boolean
+
+        Return MyBase.VoorNaamFilter(persoon)
+
+    End Function
+
+    Protected Overrides Function NaamFilter(ByVal persoon As Persoon) As Boolean
+
+        Return MyBase.NaamFilter(persoon)
+
+    End Function
+    Protected Overrides Function StatusFilter(ByVal persoon As Persoon) As Boolean
+
+        Return MyBase.StatusFilter(persoon)
+
+    End Function
+
+    Public Sub UpdateLeerlingenTabel() Handles MyBase.Load, frmleerlingenwijzigen.leerlingGewijzigd, cmbStatus.SelectedIndexChanged, txtFilter2.TextChanged, txtFilter1.TextChanged
+
+        Dim gefilterdelijst = leerlingLijst.Where(Function(x) (VoorNaamFilter(x) AndAlso NaamFilter(x) AndAlso StatusFilter(x)))
+
+        dgvLeerkrachtenLeerlingen.DataSource = gefilterdelijst.ToList
+
+        With dgvLeerkrachtenLeerlingen
             .Columns("ID").DisplayIndex = 0
             .Columns("VoorNaam").DisplayIndex = 1
             .Columns("FamilieNaam").DisplayIndex = 2
@@ -76,11 +96,12 @@ Public Class frmLeerlingen
             .Columns("Actief").DisplayIndex = 17
         End With
 
-        dgvLeerlingen.Refresh()
+        dgvLeerkrachtenLeerlingen.Refresh()
+
     End Sub
 
-    Private Sub btnLeerlingVerwijderen_Click(sender As System.Object, e As System.EventArgs) Handles btnLeerlingVerwijderen.Click
-        If dgvLeerlingen.SelectedRows IsNot Nothing Then
+    Protected Overrides Sub btnVerwijderen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnVerwijderen.Click
+        If dgvLeerkrachtenLeerlingen.SelectedRows IsNot Nothing Then
 
             Dim result = MessageBox.Show("Ben je zeker dat je de leerling wenst te verwijderen? (inactief is mogelijk)", "Leerling staat op punt verwijderd te worden", _
                                  MessageBoxButtons.YesNo, _
@@ -88,7 +109,7 @@ Public Class frmLeerlingen
 
 
             If result = DialogResult.Yes Then
-                Dim lln = leerlingLijst.Where(Function(x) (x.ID = dgvLeerlingen.SelectedCells(0).Value)).First
+                Dim lln = leerlingLijst.Where(Function(x) (x.ID = dgvLeerkrachtenLeerlingen.SelectedCells(0).Value)).First
 
                 Dim deleteFromTblCommand As New OleDbCommand("DELETE FROM TBL_Leerling WHERE ID =" & lln.ID.ToString, GlobalVariables.conn)
 
@@ -104,5 +125,4 @@ Public Class frmLeerlingen
             End If
         End If
     End Sub
-
 End Class

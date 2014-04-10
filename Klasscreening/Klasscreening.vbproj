@@ -91,7 +91,37 @@
     <Compile Include="FrmKlassen.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmLeerlingen.designer.vb">
+    <Compile Include="FrmLeerkrachten.Designer.vb">
+      <DependentUpon>FrmLeerkrachten.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLeerkrachten.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLeerkrachtenLeerlingen.designer.vb">
+      <DependentUpon>FrmLeerkrachtenLeerlingen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLeerkrachtenLeerlingen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLeerkrachtToevoegen.Designer.vb">
+      <DependentUpon>FrmLeerkrachtToevoegen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLeerkrachtToevoegen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLeerkrachtToevoegenWijzigen.Designer.vb">
+      <DependentUpon>FrmLeerkrachtToevoegenWijzigen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLeerkrachtToevoegenWijzigen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLeerkrachtWijzigen.Designer.vb">
+      <DependentUpon>FrmLeerkrachtWijzigen.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLeerkrachtWijzigen.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLeerlingen.Designer.vb">
       <DependentUpon>FrmLeerlingen.vb</DependentUpon>
     </Compile>
     <Compile Include="FrmLeerlingen.vb">
@@ -151,6 +181,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmKlassen.resx">
       <DependentUpon>FrmKlassen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLeerkrachten.resx">
+      <DependentUpon>FrmLeerkrachten.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLeerkrachtenLeerlingen.resx">
+      <DependentUpon>FrmLeerkrachtenLeerlingen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLeerkrachtToevoegen.resx">
+      <DependentUpon>FrmLeerkrachtToevoegen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLeerkrachtToevoegenWijzigen.resx">
+      <DependentUpon>FrmLeerkrachtToevoegenWijzigen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLeerkrachtWijzigen.resx">
+      <DependentUpon>FrmLeerkrachtWijzigen.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLeerlingen.resx">
       <DependentUpon>FrmLeerlingen.vb</DependentUpon>

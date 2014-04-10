@@ -1,6 +1,6 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FrmLeerlingen
-    Inherits Klasscreening.FrmLeerkrachtenLeerlingen
+Partial Class FrmLeerkrachtToevoegen
+    Inherits Klasscreening.FrmLeerkrachtToevoegenWijzigen
 
     'Form overrides dispose to clean up the component list.
     <System.Diagnostics.DebuggerNonUserCode()> _
@@ -24,13 +24,13 @@ Partial Class FrmLeerlingen
     Private Sub InitializeComponent()
         Me.SuspendLayout()
         '
-        'FrmLeerlingen
+        'FrmLeerkrachtToevoegen
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1163, 601)
-        Me.Name = "FrmLeerlingen"
-        Me.Text = "FrmLeerlingen"
+        Me.ClientSize = New System.Drawing.Size(705, 176)
+        Me.Name = "FrmLeerkrachtToevoegen"
+        Me.Text = "FrmLeerkrachtToevoegen"
         Me.ResumeLayout(False)
 
     End Sub

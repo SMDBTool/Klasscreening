@@ -3,6 +3,7 @@
     Public Property VoorNaam As String
     Public Property FamilieNaam As String
     Public Property GeboorteDatum As Date
+    Public Property Actief As String
 
     Public Overrides Function ToString() As String
         'Return MyBase.ToString()

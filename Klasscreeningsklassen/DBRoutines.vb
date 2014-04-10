@@ -82,9 +82,8 @@ Public Class DBRoutines
                 Convert.ToBoolean(reader(14)), _
                 Convert.ToBoolean(reader(15)), _
                 Convert.ToBoolean(reader(16)),
-                Convert.ToInt32(reader(17))))
+                actiefLijst.Where(Function(x) x.ID = Convert.ToInt32(reader(17))).First.Omschrijving))
             End While
-            'Convert.ToString(reader(11)), _
             reader.Close()
         Catch ex As Exception
             'MessageBox.Show(ex.Message, "Database Error tijdens laden van leerlingen.", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -118,8 +117,8 @@ Public Class DBRoutines
             Convert.ToBoolean(reader(14)), _
             Convert.ToBoolean(reader(15)), _
             Convert.ToBoolean(reader(16)),
-            Convert.ToInt32(reader(17)))
-            'Convert.ToString(reader(11)), _
+            actiefLijst.Where(Function(x) x.ID = Convert.ToInt32(reader(17))).First.Omschrijving)
+
             reader.Close()
         Catch ex As Exception
             'MessageBox.Show(ex.Message, "Database Error tijdens laden van leerlingen.", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -129,7 +128,7 @@ Public Class DBRoutines
         Return leerling
     End Function
 
-    Public Shared Function LaadLeerkrachten() As List(Of Leerkracht)
+    Public Shared Function LaadLeerkrachten(ByVal actiefLijst As List(Of Actief)) As List(Of Leerkracht)
 
 
         Dim selectFromTblCommand = New OleDbCommand("SELECT * FROM TBL_Leerkracht", GlobalVariables.conn)
@@ -143,7 +142,7 @@ Public Class DBRoutines
                     Convert.ToString(reader(2)), _
                     Convert.ToDateTime(reader(3)), _
                     Convert.ToDateTime(reader(4)), _
-                    Convert.ToInt32(reader(5)))
+                    actiefLijst.Where(Function(x) x.ID = Convert.ToInt32(reader(5))).First.Omschrijving)
                 )
 
             End While
@@ -156,6 +155,29 @@ Public Class DBRoutines
         End Try
 
         Return leerkrachtLijst
+    End Function
+    Public Shared Function LaadLeerkracht(ByVal actiefLijst As List(Of Actief), ByVal waar As String) As Leerkracht
+        Dim selectFromTblCommand As New OleDbCommand("SELECT * FROM TBL_Leerkracht " & waar, GlobalVariables.conn)
+        Dim leerkracht As Leerkracht
+        Try
+
+            Dim reader As OleDbDataReader = selectFromTblCommand.ExecuteReader()
+            reader.Read()
+            leerkracht = New Leerkracht( _
+                Convert.ToInt32(reader(0)), _
+                Convert.ToString(reader(1)), _
+                Convert.ToString(reader(2)), _
+                Convert.ToDateTime(reader(3)), _
+                Convert.ToDateTime(reader(4)), _
+                        actiefLijst.Where(Function(x) x.ID = Convert.ToInt32(reader(17))).First.Omschrijving)
+
+            reader.Close()
+        Catch ex As Exception
+            'MessageBox.Show(ex.Message, "Database Error tijdens laden van leerkrachten.", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            selectFromTblCommand.Dispose()
+        End Try
+        Return leerkracht
     End Function
     Public Shared Function LaadKlassen() As List(Of Klas)
         Dim selectFromTblCommand = New OleDbCommand("SELECT * FROM TBL_Klas", GlobalVariables.conn)

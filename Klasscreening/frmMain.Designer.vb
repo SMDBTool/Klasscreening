@@ -73,47 +73,47 @@ Partial Class frmMain
         '
         Me.tmiNieuweKlasscreening.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NieuwToolStripMenuItem, Me.OpenToolStripMenuItem})
         Me.tmiNieuweKlasscreening.Name = "tmiNieuweKlasscreening"
-        Me.tmiNieuweKlasscreening.Size = New System.Drawing.Size(152, 22)
+        Me.tmiNieuweKlasscreening.Size = New System.Drawing.Size(146, 22)
         Me.tmiNieuweKlasscreening.Text = "Klasscreening"
         '
         'NieuwToolStripMenuItem
         '
         Me.NieuwToolStripMenuItem.Name = "NieuwToolStripMenuItem"
-        Me.NieuwToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NieuwToolStripMenuItem.Size = New System.Drawing.Size(108, 22)
         Me.NieuwToolStripMenuItem.Text = "Nieuw"
         '
         'OpenToolStripMenuItem
         '
         Me.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem"
-        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OpenToolStripMenuItem.Size = New System.Drawing.Size(108, 22)
         Me.OpenToolStripMenuItem.Text = "Open"
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(143, 6)
         '
         'tmiInloggen
         '
         Me.tmiInloggen.Name = "tmiInloggen"
-        Me.tmiInloggen.Size = New System.Drawing.Size(152, 22)
+        Me.tmiInloggen.Size = New System.Drawing.Size(146, 22)
         Me.tmiInloggen.Text = "Inloggen"
         '
         'tmiUitloggen
         '
         Me.tmiUitloggen.Name = "tmiUitloggen"
-        Me.tmiUitloggen.Size = New System.Drawing.Size(152, 22)
+        Me.tmiUitloggen.Size = New System.Drawing.Size(146, 22)
         Me.tmiUitloggen.Text = "Uitloggen"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(149, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(143, 6)
         '
         'tmiAfsluiten
         '
         Me.tmiAfsluiten.Name = "tmiAfsluiten"
-        Me.tmiAfsluiten.Size = New System.Drawing.Size(152, 22)
+        Me.tmiAfsluiten.Size = New System.Drawing.Size(146, 22)
         Me.tmiAfsluiten.Text = "Afsluiten"
         '
         'tmiOpties

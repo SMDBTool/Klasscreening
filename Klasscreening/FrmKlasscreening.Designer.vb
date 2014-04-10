@@ -606,7 +606,7 @@ Partial Class FrmKlasscreening
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.LightGray
-        Me.ClientSize = New System.Drawing.Size(1264, 986)
+        Me.ClientSize = New System.Drawing.Size(1048, 753)
         Me.Controls.Add(Me.CheckBox16)
         Me.Controls.Add(Me.Label18)
         Me.Controls.Add(Me.CheckBox17)

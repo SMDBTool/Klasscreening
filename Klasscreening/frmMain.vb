@@ -17,7 +17,7 @@ Public Class frmMain
         actiefLijst = DBRoutines.LaadActief()
         klasNaamLijst = DBRoutines.LaadKlasNamen()
         klassenLijst = DBRoutines.LaadKlassen()
-        leerkrachtenLijst = DBRoutines.LaadLeerkrachten()
+        leerkrachtenLijst = DBRoutines.LaadLeerkrachten(actiefLijst)
         leerlingenLijst = DBRoutines.LaadLeerlingen(actiefLijst)
         klasLokalenLijst = DBRoutines.LaadLokalen()
         GlobalVariables.conn.Close()
@@ -60,7 +60,7 @@ Public Class frmMain
     Private Sub tmiLeerling_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmiLeerling.Click
 
         ' frmleerlingen laden in de MDI parent (frmMain)
-        Dim frmleerlingen As New frmLeerlingen(leerlingenLijst, actiefLijst)
+        Dim frmleerlingen As New FrmLeerlingen(leerlingenLijst, actiefLijst)
         frmleerlingen.MdiParent = Me
         frmleerlingen.Show()
 
@@ -86,6 +86,16 @@ Public Class frmMain
     End Sub
 
     Private Sub LokaalToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LokaalToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub tmiLeerkracht_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmiLeerkracht.Click
+
+        ' frmLeerkrachten laden in de MDI parent (frmMain)
+        Dim frmleerkrachten As New FrmLeerkrachten(leerkrachtenLijst, actiefLijst)
+        frmleerkrachten.MdiParent = Me
+        frmleerkrachten.Show()
+
 
     End Sub
 End Class
