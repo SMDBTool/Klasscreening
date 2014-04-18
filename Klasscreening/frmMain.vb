@@ -1,5 +1,8 @@
 ﻿Imports Klasscreeningsklassen
 Imports System.Data.OleDb
+Imports log4net
+Imports log4net.Config
+<Assembly: log4net.Config.XmlConfigurator(Watch:=True)> 
 
 Public Class frmMain
 
@@ -9,7 +12,9 @@ Public Class frmMain
     Public klasNaamLijst As New List(Of KlasNaam)
     Public klasLokalenLijst As New List(Of Lokaal)
     Public actiefLijst As New List(Of Actief)
-    Public verhuisLijst As New List(Of verhuis)
+    Public verhuisLijst As New List(Of Verhuis)
+
+    Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
 
     Private Sub OphalenLijsten()
 
@@ -36,9 +41,15 @@ Public Class frmMain
         '---------------------------------------------------------------------------------------------------------------------
 
         OphalenLijsten()
+        'For i As Integer = 1 To 100000
 
 
-
+        '    log.Debug("Debug: Toepassing gestart.")
+        '    log.Error("Error: Toepassing gestart.")
+        '    log.Fatal("Fatal: Toepassing gestart.")
+        '    log.Info("Info: Toepassing gestart.")
+        '    log.Warn("Warn: Toepassing gestart.")
+        'Next
     End Sub
 
     Private Sub tmiInloggen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tmiInloggen.Click
@@ -69,10 +80,15 @@ Public Class frmMain
 
     Private Sub tmiSamenstellenKlassen_Click(sender As System.Object, e As System.EventArgs) Handles tmiSamenstellenKlassen.Click
 
+        Dim test As New List(Of Persoon)
+
+        test.AddRange(leerlingenLijst)
+        test.AddRange(leerkrachtenLijst)
+
         Dim openstaandeLijst = From klas In klassenLijst
         Where klas.StopTijdStip Is Nothing
-        Join leerling In leerlingenLijst On klas.Deelnemer Equals leerling.ID
-        Select New Verhuis(leerling, klasNaamLijst.Where(Function(x) x.ID = klas.Naam).First, klas.ID)
+        Join leerling In test On klas.Deelnemer Equals leerling.ID
+        Select New Verhuis(leerling, klasNaamLijst.Where(Function(x) x.ID = klas.Naam).FirstOrDefault, klas.ID)
 
         Dim frmKlassen As New FrmKlassen(openstaandeLijst.ToList, klasNaamLijst, leerlingenLijst, leerkrachtenLijst, klassenLijst)
         frmKlassen.MdiParent = Me

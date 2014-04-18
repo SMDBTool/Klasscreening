@@ -194,7 +194,7 @@ Public Class DBRoutines
                 reader.Close()
 
             Catch ex As Exception
-                'MessageBox.Show(ex.Message, "Database Error tijdens laden van Klassen.", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
             Finally
                 selectFromTblCommand.Dispose()
             End Try

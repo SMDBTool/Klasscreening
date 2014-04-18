@@ -1,7 +1,6 @@
 ﻿Public Class Leerkracht
     Inherits Persoon
     Public Property InDienstTreding As Date
-    Public Property Actief As String
     Public Sub New(id As Integer, voornaam As String, familienaam As String, geboortedatum As Date, indiensttreding As Date, actief As String)
         Me.ID = id
         Me.VoorNaam = voornaam

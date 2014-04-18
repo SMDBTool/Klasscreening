@@ -14,7 +14,7 @@
     Public Property Pestslachtoffer As Boolean
     Public Property Anderstalig As Boolean
     Public Property Bisser As Boolean
-    Public Property Actief As String
+
 
     Public Sub New(ByVal id As Integer, ByVal voornaam As String, ByVal familienaam As String, ByVal geboortedatum As Date, ByVal inschrijvingsdatum As Date, _
         ByVal os_ass As Boolean, ByVal os_adhd As Boolean, ByVal os_gts As Boolean, ByVal ls_dyslexie As Boolean, ByVal ls_dysorthografie As Boolean, _

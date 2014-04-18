@@ -67,6 +67,6 @@
     End Function
     Public Overrides Function ToString() As String
         'Return MyBase.ToString()
-        Return Deelnemer.ToString
+        Return ID.ToString + " " + Deelnemer.ToString
     End Function
 End Class

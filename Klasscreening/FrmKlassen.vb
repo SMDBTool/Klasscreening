@@ -1,5 +1,6 @@
 ﻿Imports Klasscreeningsklassen
 
+
 Public Class FrmKlassen
 
     Private _verhuisLijst As List(Of Verhuis)
@@ -7,10 +8,12 @@ Public Class FrmKlassen
     Private _klassenLijst As List(Of Klas)
     Private _leerlingenLijst As List(Of Leerling)
     Private _leerkrachtenLijst As List(Of Leerkracht)
-
+    Private Shared ReadOnly log As log4net.ILog = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType)
+    Private sb As System.Text.StringBuilder
 
     Public Sub New(verhuislijst As List(Of Verhuis), klasNaamLijst As List(Of KlasNaam), ByRef leerlingenlijst As List(Of Leerling), ByRef leerkrachtenlijst As List(Of Leerkracht), ByRef klaslijst As List(Of Klas))
         InitializeComponent()
+        sb = New System.Text.StringBuilder
 
         Me._verhuisLijst = verhuislijst
         Me._klasNaamLijst = klasNaamLijst
@@ -126,47 +129,157 @@ Public Class FrmKlassen
     End Sub
 
     Private Sub btnBewaar_Click(sender As System.Object, e As System.EventArgs) Handles btnBewaar.Click
-        Dim updateLijst As New List(Of OleDb.OleDbCommand)
 
         Dim gewijzigde = From verhuisde In _verhuisLijst
-                         Where verhuisde.NaarKlas.ID <> verhuisde.VanKlas.ID
+                         Where verhuisde.NaarKlas.ID <> verhuisde.VanKlas.ID AndAlso verhuisde.NaarKlas.Naam <> "Afgestudeerd"
+                         Select verhuisde
+        Dim afgestudeerde = From verhuisde In _verhuisLijst
+                         Where verhuisde.NaarKlas.ID <> verhuisde.VanKlas.ID AndAlso verhuisde.NaarKlas.Naam = "Afgestudeerd"
+                         Select verhuisde
+        Dim instromers = From verhuisde In _verhuisLijst
+                         Where verhuisde.NaarKlas.ID <> verhuisde.VanKlas.ID AndAlso verhuisde.VanKlas.Naam = "NieuweLeerling"
                          Select verhuisde
 
         Dim tijdstip As Date = dtpUitvoerdatum.Value
-        Dim update, insert, hoogste As OleDb.OleDbCommand
-        Dim verhuiselement As Verhuis
-        Dim hoogsteIndex As Integer
 
         GlobalVariables.conn.Open()
+
         For Each verhuisde In gewijzigde
-
-            verhuiselement = verhuisde
-            _klassenLijst.Where(Function(x) x.ID = verhuiselement.VorigeKlasID).First.StopTijdStip = tijdstip
-            update = Verhuis.UpdateVerhuis(verhuisde, tijdstip)
-            insert = Verhuis.InsertVerhuis(verhuisde, tijdstip)
-            hoogste = Verhuis.HoogsteID
-
-            update.ExecuteNonQuery()
-            insert.ExecuteNonQuery()
-            Dim reader As OleDb.OleDbDataReader = hoogste.ExecuteReader()
-
-            While reader.Read()
-                hoogsteIndex = reader(0)
-            End While
-
-            With verhuiselement
-                _klassenLijst.Where(Function(x) x.ID = verhuiselement.VorigeKlasID).First.StopTijdStip = tijdstip
-                _klassenLijst.Add(New Klas(hoogsteIndex, .NaarKlas.ID, .persoon.ID, tijdstip, Nothing, Verhuis.KiesJaarVolgensDatum(tijdstip)))
-            End With
-
+            verhuisVanKlasNaarKlas(verhuisde, tijdstip)
         Next
+
+        For Each afgestudeerdeLeerling In afgestudeerde
+            Afstuderen(afgestudeerdeLeerling, tijdstip)
+        Next
+
+        For Each nieuweNaarKlas In instromers
+            instromen(nieuweNaarKlas, tijdstip)
+        Next
+
         GlobalVariables.conn.Close()
 
-        GlobalVariables.conn.Open()
-        For Each updateElement In updateLijst
-            updateElement.ExecuteNonQuery()
-        Next
-        GlobalVariables.conn.Close()
+        updateAlleLijsten()
+
+    End Sub
+    Private Sub verhuisVanKlasNaarKlas(ByRef verhuisde As Verhuis, tijdstip As Date)
+        Dim update, insert, hoogste As OleDb.OleDbCommand
+        Dim hoogsteIndex, indexKlassenLijst, indexVanVorigeKlas As Integer
+
+        'Updaten van Klassenlijst + verwijderen ahv de index
+        indexVanVorigeKlas = verhuisde.VorigeKlasID
+
+        Dim elementUitKlassenLijst = From x In _klassenLijst
+                                     Where x.ID = indexVanVorigeKlas
+                                     Distinct
+
+
+        indexKlassenLijst = _klassenLijst.IndexOf(elementUitKlassenLijst.First)
+
+        'Aanmaken en uitvoeren van SQL opdrachten
+        update = Verhuis.UpdateVerhuis(verhuisde, tijdstip)
+        insert = Verhuis.InsertVerhuis(verhuisde, tijdstip)
+        hoogste = Verhuis.HoogsteID
+
+        update.ExecuteNonQuery()
+        insert.ExecuteNonQuery()
+
+        'Uitlezen van nieuwe ingevoegd element in de TBL_Klas om hetzelfde element in de List(of Klas) toe te voegen
+        Dim reader As OleDb.OleDbDataReader = hoogste.ExecuteReader()
+
+        While reader.Read()
+            hoogsteIndex = reader(0)
+        End While
+
+        With verhuisde
+            'Updaten van oud klaselement in de lijst met stoptijdstip en dit element verwijderen
+            _klassenLijst(indexKlassenLijst).StopTijdStip = tijdstip
+            _klassenLijst.RemoveAt(indexKlassenLijst)
+            'Nieuw element toevoegen aan de List(Of Klas).. met juiste index
+            _klassenLijst.Add(New Klas(hoogsteIndex, .NaarKlas.ID, .persoon.ID, tijdstip, Nothing, Verhuis.KiesJaarVolgensDatum(tijdstip)))
+        End With
+
+        'Persoon blijft in school --> element blijft bestaan, maar verhuis vind nu plaats
+        verhuisde.VanKlas = verhuisde.NaarKlas
+        verhuisde.VorigeKlasID = hoogsteIndex
+
+        'Loggen van SQL commandos
+        sb.Append("verhuisVanKlasNaarKlas" + vbCrLf + vbTab)
+        sb.Append(update.CommandText + vbCrLf + vbTab)
+        sb.Append(insert.CommandText + vbCrLf + vbTab)
+        sb.Append(hoogste.CommandText + "-----------------> +" + hoogsteIndex.ToString)
+        log.Info(sb)
+        sb.Clear()
+
+
+    End Sub
+    Private Sub Afstuderen(ByRef verhuisde As Verhuis, tijdstip As Date)
+        Dim updateKlas, updatePersoon As OleDb.OleDbCommand
+        Dim verhuiselement As Verhuis = verhuisde
+        Dim indexKlassenLijst, indexVanVorigeKlas As Integer
+
+        verhuisde.VanKlas = verhuisde.NaarKlas
+        indexVanVorigeKlas = verhuisde.VorigeKlasID
+
+        Dim elementUitKlassenLijst = From x In _klassenLijst
+                              Where x.ID = indexVanVorigeKlas
+                              Distinct
+
+        indexKlassenLijst = _klassenLijst.IndexOf(elementUitKlassenLijst.First)
+
+        updateKlas = Verhuis.UpdateVerhuis(verhuisde, tijdstip)
+        updatePersoon = verhuisde.persoon.UpdateActiefWithAfgestudeerd
+        verhuisde.persoon.Actief = "Afgestudeerd"
+
+        updateKlas.ExecuteNonQuery()
+        updatePersoon.ExecuteNonQuery()
+
+        _klassenLijst(indexKlassenLijst).StopTijdStip = tijdstip
+        _klassenLijst.RemoveAt(indexKlassenLijst)
+
+
+
+
+        sb.Append("Afstuderen" + vbCrLf + vbTab)
+        sb.Append(updateKlas.CommandText + vbCrLf + vbTab)
+        sb.Append(updatePersoon.CommandText)
+        log.Info(sb)
+        sb.Clear()
+
+
+    End Sub
+    Private Sub instromen(ByRef verhuisde As Verhuis, tijdstip As Date)
+        Dim insert, hoogste As OleDb.OleDbCommand
+        Dim verhuiselement As Verhuis = verhuisde
+        Dim hoogsteIndex, indexKlassenLijst, indexVanVorigeKlas As Integer
+
+        verhuisde.VanKlas = verhuisde.NaarKlas
+        indexVanVorigeKlas = verhuisde.VorigeKlasID
+        Dim elementUitKlassenLijst = From x In _klassenLijst
+                             Where x.ID = indexVanVorigeKlas
+                             Distinct
+
+        indexKlassenLijst = _klassenLijst.IndexOf(elementUitKlassenLijst.First)
+
+        insert = Verhuis.InsertVerhuis(verhuisde, tijdstip)
+        hoogste = Verhuis.HoogsteID
+
+        insert.ExecuteNonQuery()
+
+        Dim reader As OleDb.OleDbDataReader = hoogste.ExecuteReader()
+
+        While reader.Read()
+            hoogsteIndex = reader(0)
+        End While
+
+        With verhuisde
+            _klassenLijst.Add(New Klas(hoogsteIndex, .NaarKlas.ID, .persoon.ID, tijdstip, Nothing, Verhuis.KiesJaarVolgensDatum(tijdstip)))
+        End With
+
+        sb.Append("instromen:" + vbCrLf + vbTab)
+        sb.Append(insert.CommandText + vbCrLf + vbTab)
+        sb.Append(hoogste.CommandText + vbTab * 2 + "----> +" + vbTab * 2 + hoogsteIndex)
+        log.Info(sb)
+        sb.Clear()
 
     End Sub
 End Class
